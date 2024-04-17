@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import modelo.Grafo;
+import modelo.Horario;
 
 /**
  *
@@ -155,6 +157,57 @@ private void encontrarRutasDFS(String origen, String destino, ArrayList<Grafo> g
         } else {
             System.out.println("La carpeta está vacía.");
         }
+    }
+    
+    public void informacionDeRuta(JTextArea area, ArrayList<Grafo> lista, boolean esVehiculo){
+        int distancia=0;
+        double rapidezVehiculo=0;
+        double rapidezAPie=0;
+        int consumoGas=0;
+        int esfuerzoFisico=0;
+        
+        for (Grafo grafo : lista) {
+            distancia+=grafo.getDistancia();
+            rapidezVehiculo+=grafo.getDistancia()/(grafo.getTiempo_vehiculo()*(1+traerHorario(grafo).getProbabilidad_trafico()));
+            rapidezAPie+=grafo.getDistancia()/grafo.getTiempo_pie();
+            consumoGas+=grafo.getConsumo_gas();
+            esfuerzoFisico+=grafo.getDesgaste_personal();
+        }
+        String informacion="Distancia:"+distancia + " km";
+        if(esVehiculo){
+            informacion+="\nCosumo de gas: "+consumoGas+" litros";
+            informacion+="\nVelocidad Vehiculo: "+rapidezVehiculo+" km/h";
+            if(hayDobleVia(lista)){
+                informacion+="\nHay doble via";
+            }else{
+                informacion+="\nNo hay doble via";
+            }
+        }else{
+            informacion+="\nDesgaste fisico: "+esfuerzoFisico;
+            informacion+="\nVelocidad a pie: "+rapidezAPie+" km/h";
+        }
+        area.setText(informacion);
+    }
+    
+    public Horario traerHorario(Grafo grafo){
+        Horario h= new Horario("", "", 0, 0, 0);
+        for (Horario horario : Datos.Datos.listaHorarios) {
+            if(horario.getDestino().equals(grafo.getDestino())&&horario.getOrigen().equals(grafo.getOrigen())){
+                h=horario;
+                break;
+            }
+        }
+        return h;
+    }
+    
+    public boolean hayDobleVia(ArrayList<Grafo> listado){
+        boolean hay=false;
+        if(encontrarRutas(listado.get(listado.size()-1).getDestino(), 
+                listado.get(0).getOrigen(), listado).size()!=0){
+            hay=true;
+        }
+        
+        return hay;
     }
     
 }

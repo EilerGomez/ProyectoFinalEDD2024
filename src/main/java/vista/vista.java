@@ -22,8 +22,9 @@ import utilidades.Graficar;
 public class vista extends javax.swing.JFrame {
 
     Controlador.ControladorRutas rutasController = new ControladorRutas();
-    public int contadorImagenes=1;
-    public ArrayList<String> listaContadorImages= new ArrayList<>();
+    public int contadorImagenes = 1;
+    public ArrayList<String> listaContadorImages = new ArrayList<>();
+    ArrayList<ArrayList<Grafo>> rutas = new ArrayList<>();
 
     /**
      * Creates new form vista
@@ -31,8 +32,8 @@ public class vista extends javax.swing.JFrame {
     public vista() {
         rutasController.eliminarContenidoCarpeta("ImagesTemp");
         initComponents();
-        initOthersComponents(labelGrafo,jPanel1);
-        initOthersComponents(labelRutaUnidad,jPanel2);
+        initOthersComponents(labelGrafo, jPanel1);
+        initOthersComponents(labelRutaUnidad, jPanel2);
         this.btnVerRutas.setEnabled(false);
         rutasController.llenarTablasDestino(tablaDestino, Datos.Datos.listaGrafos);
         rutasController.llenarTablasOrigen(tablaOrigen, Datos.Datos.listaGrafos);
@@ -52,8 +53,6 @@ public class vista extends javax.swing.JFrame {
         panel.setLayout(new BorderLayout());
         panel.add(scrollPane, BorderLayout.CENTER);
     }
-    
-    
 
     private void llamarImagenGrafoCompleto() {
 
@@ -65,15 +64,16 @@ public class vista extends javax.swing.JFrame {
         // Asignar el ImageIcon al JLabel
         labelGrafo.setIcon(icono);
     }
+
     private void llamarImagenDeCadaRuta(String nameImg) {
         String imagePath;
-        if(comboRutas.getSelectedIndex()<0){
-            imagePath = "ImagesTemp/" + nameImg +"_"+listaContadorImages.get(0) +".png";
-        }else{
-            imagePath = "ImagesTemp/" + nameImg +"_"+listaContadorImages.get(comboRutas.getSelectedIndex()) +".png";
+        if (comboRutas.getSelectedIndex() < 0) {
+            imagePath = "ImagesTemp/" + nameImg + "_" + listaContadorImages.get(0) + ".png";
+        } else {
+            imagePath = "ImagesTemp/" + nameImg + "_" + listaContadorImages.get(comboRutas.getSelectedIndex()) + ".png";
 
         }
-        
+
         File imageFile = new File(imagePath);
 
         // Verificar si el archivo de imagen existe
@@ -87,8 +87,7 @@ public class vista extends javax.swing.JFrame {
             System.out.println("La imagen " + nameImg + " no existe en el sistema de archivos.");
             // Aquí puedes mostrar un mensaje de error o tomar otra acción según tus necesidades
         }
-}
-
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -118,6 +117,12 @@ public class vista extends javax.swing.JFrame {
         labelRutaUnidad = new javax.swing.JLabel();
         rutaUnitLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -216,26 +221,30 @@ public class vista extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(labelRutaUnidad)
+                .addContainerGap()
+                .addComponent(labelRutaUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addContainerGap()
                 .addComponent(labelRutaUnidad)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(231, Short.MAX_VALUE))
         );
 
         rutaUnitLabel.setText("Ruta: ");
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Seleccionar ruta");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane3.setViewportView(jTextArea1);
 
         jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -249,41 +258,46 @@ public class vista extends javax.swing.JFrame {
         jDesktopPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(rutaUnitLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jScrollPane3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap()
+                        .addComponent(comboRutas, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(rutaUnitLabel)
+                        .addGap(38, 38, 38))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addComponent(vehiculoBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jRadioButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addGap(46, 46, 46)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jDesktopPane1Layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(vehiculoBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(46, 46, 46)
+                                .addComponent(jRadioButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addContainerGap()
                                 .addComponent(btnVerRutas, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(comboRutas, 0, 343, Short.MAX_VALUE))))
-                        .addGap(37, 37, 37)
-                        .addComponent(rutaUnitLabel)))
-                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)))
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -299,30 +313,55 @@ public class vista extends javax.swing.JFrame {
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
                         .addGap(28, 28, 28)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15)
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(vehiculoBTN)
-                            .addComponent(jRadioButton2)))
+                            .addComponent(jRadioButton2)
+                            .addComponent(vehiculoBTN)))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
                         .addComponent(btnVerRutas)
-                        .addGap(37, 37, 37)
+                        .addGap(18, 18, 18)
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(comboRutas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(rutaUnitLabel))
-                        .addGap(46, 46, 46)
-                        .addComponent(jButton1)
-                        .addGap(0, 121, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Principal", jDesktopPane1);
+
+        jMenu2.setText("Archivo");
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
+
+        jMenuItem2.setText("Cargar datos");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Edit");
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -370,7 +409,8 @@ public class vista extends javax.swing.JFrame {
 
     private void btnVerRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerRutasActionPerformed
         if (!rutasController.esDiferenteRuta(tablaDestino, tablaOrigen)) {
-            ArrayList<ArrayList<Grafo>> rutas = rutasController.encontrarRutas(
+            rutas.clear();
+            rutas = rutasController.encontrarRutas(
                     rutasController.nombreRuta(tablaOrigen),
                     rutasController.nombreRuta(tablaDestino), Datos.Datos.listaGrafos);
             System.out.println(rutas.size());
@@ -383,33 +423,51 @@ public class vista extends javax.swing.JFrame {
             }
             listaContadorImages.clear();
             Graficar graficar = new Graficar();
-            int indice=1;
-            for (ArrayList<Grafo> ruta : rutas) {                
-                graficar.graficarRutaPorRuta(ruta,indice, contadorImagenes);
-                listaContadorImages.add(""+contadorImagenes);
+            int indice = 1;
+            for (ArrayList<Grafo> ruta : rutas) {
+                graficar.graficarRutaPorRuta(ruta, indice, contadorImagenes);
+                listaContadorImages.add("" + contadorImagenes);
                 contadorImagenes++;
                 indice++;
             }
             rutasController.llenarComboRutas(rutas, comboRutas);
-            
+
         }
 
     }//GEN-LAST:event_btnVerRutasActionPerformed
 
     private void comboRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboRutasActionPerformed
         // TODO add your handling code here:
-        this.rutaUnitLabel.setText(""+comboRutas.getSelectedItem());
-        llamarImagenDeCadaRuta(""+comboRutas.getSelectedItem());
+        this.rutaUnitLabel.setText("" + comboRutas.getSelectedItem());
+        if (comboRutas.getSelectedIndex() >= 0) {
+            rutasController.informacionDeRuta(jTextArea1, rutas.get(comboRutas.getSelectedIndex()), this.vehiculoBTN.isSelected());
+        }
+        llamarImagenDeCadaRuta("" + comboRutas.getSelectedItem());
     }//GEN-LAST:event_comboRutasActionPerformed
 
     private void comboRutasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboRutasMouseClicked
         // TODO add your handling code here:
-       
+
     }//GEN-LAST:event_comboRutasMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        System.out.println("posible carga de datos");
+        cargaDatos2 datos = new cargaDatos2();
+        datos.setVisible(true);
+        datos.setEnabled(true);
+        datos.setResizable(false);
+        datos.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -423,12 +481,18 @@ public class vista extends javax.swing.JFrame {
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel labelGrafo;
     private javax.swing.JLabel labelRutaUnidad;
     private javax.swing.JLabel rutaUnitLabel;
