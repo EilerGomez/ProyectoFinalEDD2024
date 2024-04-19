@@ -4,21 +4,90 @@
  */
 package vista;
 
+import Controlador.ControladorRutas;
+import Controlador.ControladorVista2;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.io.File;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import modelo.Grafo;
+import utilidades.Graficar;
+import utilidades.Reloj;
+
 /**
  *
  * @author eiler
  */
 public class vista2 extends javax.swing.JFrame {
 
+    public Controlador.ControladorRutas rutasController = new ControladorRutas();
+    vista vista;
+    boolean esVehiculo;
+    String destino;
+    String origen;
+    ArrayList<Grafo> listarutas;
+    ArrayList<ArrayList<Grafo>> nuevasRutas = new ArrayList<>();
+    ControladorVista2 controladorRutas2 = new ControladorVista2();
+    Reloj reloj;
+    public int contadorImagenes = 1;
+    public ArrayList<String> listaContadorImages = new ArrayList<>();
+
     /**
      * Creates new form vista2
      */
-    public vista2(vista vista1, boolean esVehiculo, String destino) {
+    public vista2(vista vista1, boolean esVehiculo, String destino, String origen, String rutaGrafoORuta, ArrayList<Grafo> lista) {
+        this.vista = vista1;
+        this.esVehiculo = esVehiculo;
+        this.destino = destino;
+        this.origen = origen;
+        this.listarutas = lista;
+        rutasController.eliminarContenidoCarpeta("ImagesTemp2");
         initComponents();
+        this.btnSeleccionarPunto.setEnabled(false);
+        this.btnMover.setEnabled(false);
+        reloj = new Reloj(horaLabel);
+        initOthersComponents(rutaElejida, jPanel1);
+        initOthersComponents(rutaIndividual, jPanel2);
+        llamarImagenALabelGrafo(rutaGrafoORuta);
+        controladorRutas2.llenarTablaDePosicionesOLugares(jTable1, listarutas);
+        this.labelPosicionActual.setText("Posicion actual: " + listarutas.get(0).getOrigen());
+
     }
-    
-    private void initOthersComponents(){//iniciar las labels con imagenes y con scrollpane
-        
+
+    private void initOthersComponents(JLabel label, JPanel panel) {
+        // Crear un JPanel que contendrá al JLabel con la imagen
+        JPanel imagePanel = new JPanel();
+        imagePanel.setLayout(new BorderLayout());
+        imagePanel.add(label, BorderLayout.CENTER);
+
+        // Crear un JScrollPane y agregar el JPanel a él
+        JScrollPane scrollPane = new JScrollPane(imagePanel);
+
+        // Establecer las propiedades del JScrollPane
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        // Establecer el tamaño preferido del JScrollPane para que no cambie
+        scrollPane.setPreferredSize(new Dimension(400, 200)); // Establece el tamaño deseado aquí
+
+        // Agregar el JScrollPane al JPanel pasado como argumento
+        panel.setLayout(new BorderLayout());
+        panel.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void llamarImagenALabelGrafo(String ruta) {
+        String imagePath = ruta;
+
+        // Crear un ImageIcon con la imagen cargada desde el archivo
+        ImageIcon icono = new ImageIcon(imagePath);
+
+        // Asignar el ImageIcon al JLabel
+        rutaElejida.setIcon(icono);
     }
 
     /**
@@ -35,21 +104,25 @@ public class vista2 extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        btnMover = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         rutaElejida = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         comboNuevasRutas = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         labelMejorRuta = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        horaLabel = new javax.swing.JLabel();
+        btnSeleccionarPunto = new javax.swing.JButton();
+        labelPosicionActual = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        rutaIndividual = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Selecione su posicion actual");
+        jLabel1.setText("Selecione su nueva posicion");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -62,51 +135,45 @@ public class vista2 extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
-        jButton2.setText("Recalcular rutas");
+        btnMover.setText("Mover");
+        btnMover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMoverActionPerformed(evt);
+            }
+        });
 
-        rutaElejida.setText("labelRutaElejida");
+        rutaElejida.setText("-");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(103, 103, 103)
+                .addContainerGap()
                 .addComponent(rutaElejida)
-                .addContainerGap(248, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
                 .addComponent(rutaElejida)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addGap(0, 167, Short.MAX_VALUE))
         );
 
         jLabel2.setText("Ruta elegida:");
 
-        jLabel3.setText("labelRutaselecionada");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(102, 102, 102)
-                .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addContainerGap(128, Short.MAX_VALUE))
-        );
-
-        comboNuevasRutas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboNuevasRutas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboNuevasRutasActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Informacion de la ruta");
 
@@ -116,16 +183,52 @@ public class vista2 extends javax.swing.JFrame {
 
         labelMejorRuta.setText("jLabel5");
 
+        jLabel3.setText("Reloj:");
+
+        horaLabel.setText("jLabel5");
+
+        btnSeleccionarPunto.setText("Selecionar");
+        btnSeleccionarPunto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSeleccionarPuntoActionPerformed(evt);
+            }
+        });
+
+        labelPosicionActual.setText("Posicion Actual:");
+
+        rutaIndividual.setText("-");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(rutaIndividual)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(rutaIndividual)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnMover, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(comboNuevasRutas, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(labelMejorRuta, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(horaLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnSeleccionarPunto, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(labelPosicionActual, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -134,52 +237,71 @@ public class vista2 extends javax.swing.JFrame {
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMover, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(comboNuevasRutas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE))
-                .addGap(122, 122, 122)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
+                    .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(labelPosicionActual, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelMejorRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 11, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(16, 16, 16)
+                        .addComponent(btnSeleccionarPunto)
+                        .addGap(23, 23, 23)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(101, 101, 101)
+                                .addComponent(jLabel3)
+                                .addGap(37, 37, 37)
+                                .addComponent(horaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGap(109, 109, 109)
+                        .addComponent(labelMejorRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(labelPosicionActual)))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(horaLabel))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSeleccionarPunto))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(comboNuevasRutas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(27, 27, 27))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(btnMover)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelMejorRuta)
-                        .addGap(46, 46, 46))))
+                        .addGap(23, 23, 23))))
         );
 
         jTabbedPane1.addTab("Principal", jDesktopPane1);
@@ -197,19 +319,100 @@ public class vista2 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void comboNuevasRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboNuevasRutasActionPerformed
+        // TODO add your handling code here:
+        if (comboNuevasRutas.getSelectedIndex() >= 0) {
+            rutasController.informacionDeRuta(jTextArea1, nuevasRutas.get(comboNuevasRutas.getSelectedIndex()), this.esVehiculo);
+        }
+        llamarImagenDeCadaRuta("" + comboNuevasRutas.getSelectedItem());
+        this.btnMover.setEnabled(true);
+    }//GEN-LAST:event_comboNuevasRutasActionPerformed
+    private void llamarImagenDeCadaRuta(String nameImg) {
+        String imagePath;
+        if (comboNuevasRutas.getSelectedIndex() < 0) {
+            imagePath = "ImagesTemp2/" + nameImg + "_" + listaContadorImages.get(0) + ".png";
+        } else {
+            imagePath = "ImagesTemp2/" + nameImg + "_" + listaContadorImages.get(comboNuevasRutas.getSelectedIndex()) + ".png";
+
+        }
+
+        File imageFile = new File(imagePath);
+
+        // Verificartrue si el archivo de imagen existe
+        if (imageFile.exists()) {
+            // Si el archivo existe, cargar la imagen
+            ImageIcon icono = new ImageIcon(imagePath);
+            rutaIndividual.setIcon(icono);
+            System.out.println("Imagen " + nameImg + " cargada correctamente.");
+        } else {
+            // Si el archivo no existe, mostrar un mensaje de error o tomar otra acción según sea necesario
+            System.out.println("La imagen " + nameImg + " no existe en el sistema de archivos.");
+            // Aquí puedes mostrar un mensaje de error o tomar otra acción según tus necesidades
+        }
+    }
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        this.btnSeleccionarPunto.setEnabled(true);
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnSeleccionarPuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarPuntoActionPerformed
+        // TODO add your handling code here:
+        String puntoSeleccionado = jTable1.getValueAt(jTable1.getSelectedRow(), jTable1.getSelectedColumn()).toString();
+        this.labelPosicionActual.setText("Posicion actual: " + puntoSeleccionado);
+        if (puntoSeleccionado.equals(destino)) {
+            JOptionPane.showMessageDialog(this, "Ha llegado a su destino");
+        } else {
+            nuevasRutas.clear();
+            nuevasRutas = rutasController.encontrarRutas(puntoSeleccionado, destino, Datos.Datos.listaGrafos);
+            listaContadorImages.clear();
+            Graficar graficar = new Graficar();
+            int indice = 1;
+            System.out.println("Tamanio rutas: " + nuevasRutas.size());
+            for (ArrayList<Grafo> ruta : nuevasRutas) {
+                graficar.graficarRutaPorRuta(ruta, indice, contadorImagenes, "ImagesTemp2");
+                listaContadorImages.add("" + contadorImagenes);
+                contadorImagenes++;
+                indice++;
+            }
+            controladorRutas2.llenarComboConRutas(comboNuevasRutas, nuevasRutas);
+            rutasController.mejorRuta(labelMejorRuta, nuevasRutas, esVehiculo);
+        }
+        Graficar graficar = new Graficar();
+        
+        graficar.graficarNuevoGrafoCompleto(nuevasRutas, "ImagesTemp2/mapa_" + contadorImagenes + ".png");
+        llamarImagenALabelGrafo("ImagesTemp2/mapa_" + contadorImagenes + ".png");
+        this.comboNuevasRutas.setEnabled(true);
+        this.btnSeleccionarPunto.setEnabled(false);
+        contadorImagenes++;
+
+    }//GEN-LAST:event_btnSeleccionarPuntoActionPerformed
+
+    private void btnMoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoverActionPerformed
+        // TODO add your handling code here:
+        controladorRutas2.llenarTablaDePosicionesOLugares(jTable1, nuevasRutas.get(comboNuevasRutas.getSelectedIndex()));
+
+        rutaElejida.setIcon(null);
+        labelMejorRuta.setText("");
+        comboNuevasRutas.setEnabled(false);
+        jTextArea1.setText("");
+        this.btnMover.setEnabled(false);
+    }//GEN-LAST:event_btnMoverActionPerformed
+
     /**
      * @param args the command line arguments
      */
-   
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMover;
+    private javax.swing.JButton btnSeleccionarPunto;
     private javax.swing.JComboBox<String> comboNuevasRutas;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel horaLabel;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -223,6 +426,8 @@ public class vista2 extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel labelMejorRuta;
+    private javax.swing.JLabel labelPosicionActual;
     private javax.swing.JLabel rutaElejida;
+    private javax.swing.JLabel rutaIndividual;
     // End of variables declaration//GEN-END:variables
 }

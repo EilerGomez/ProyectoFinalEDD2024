@@ -4,6 +4,7 @@
  */
 package vista;
 
+import Controlador.ControladorRutas;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -15,6 +16,7 @@ import utilidades.Lector;
  * @author eiler
  */
 public class cargaDatos extends javax.swing.JFrame {
+    ControladorRutas rutasController = new ControladorRutas();
 
     /**
      * Creates new form cargaDatos
@@ -124,7 +126,7 @@ public class cargaDatos extends javax.swing.JFrame {
         vista.setEnabled(true);
         vista.setLocationRelativeTo(null);
         Graficar graficar = new Graficar();
-        graficar.graficarGrafoCompleto(Datos.Datos.listaGrafos);
+        graficar.graficarGrafoCompleto(Datos.Datos.listaGrafos,"Images","mapaCompleto");
     }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:

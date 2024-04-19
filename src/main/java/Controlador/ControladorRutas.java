@@ -217,6 +217,36 @@ public class ControladorRutas {
             int eficienciaUnidad = 0;
             for (Grafo grafo : listaU) {
                 eficienciaUnidad += grafo.getDistancia();
+                /*if (esVehiculo) {
+                    eficienciaUnidad += grafo.getConsumo_gas();
+                    eficienciaUnidad += grafo.getTiempo_vehiculo();
+                    eficiencia += traerHorario(grafo).getProbabilidad_trafico();
+                } else {
+                    eficienciaUnidad += grafo.getDesgaste_personal();
+                    eficienciaUnidad += grafo.getTiempo_pie();
+                }*/
+
+            }
+            if (eficiencia == 0) {
+                eficiencia = eficienciaUnidad;
+                labelMejorRuta.setText("Ruta mas corta: Ruta" + contador + " ditancia de: " + eficiencia + " Kms");
+            } else {
+                if (eficienciaUnidad < eficiencia) {
+                    eficiencia = eficienciaUnidad;
+                    labelMejorRuta.setText("Ruta mas corta: Ruta" + contador + " ditancia de: " + eficiencia + " Kms");
+                }
+            }
+
+            contador++;
+        }
+    }
+    /*public void mejorRuta(JLabel labelMejorRuta, ArrayList<ArrayList<Grafo>> lista, boolean esVehiculo) {
+        int contador = 1;
+        int eficiencia = 0;
+        for (ArrayList<Grafo> listaU : lista) {
+            int eficienciaUnidad = 0;
+            for (Grafo grafo : listaU) {
+                eficienciaUnidad += grafo.getDistancia();
                 if (esVehiculo) {
                     eficienciaUnidad += grafo.getConsumo_gas();
                     eficienciaUnidad += grafo.getTiempo_vehiculo();
@@ -239,6 +269,6 @@ public class ControladorRutas {
 
             contador++;
         }
-    }
+    }*/
 
 }

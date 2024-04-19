@@ -17,7 +17,33 @@ import modelo.Grafo;
 
 public class Graficar {
 
-    public void graficarGrafoCompleto(ArrayList<Grafo> lista) {
+    public void graficarNuevoGrafoCompleto(ArrayList<ArrayList<Grafo>> lista, String ruta) {
+        MutableGraph g = mutGraph("example2").setDirected(true);
+        for (ArrayList<Grafo> arrayList : lista) {
+            for (Grafo grafo : arrayList) {
+                String origen = grafo.getOrigen();
+                String destino = grafo.getDestino();
+
+                // Agregar nodos al grafo
+                Node nodoOrigen = node(origen).with(Label.of(origen));
+                Node nodoDestino = node(destino).with(Label.of(destino));
+
+                // Agregar una conexión entre los nodos con una flecha
+                g.add(nodoOrigen.link(to(nodoDestino)).with(Label.of(origen)));
+            }
+        }
+        try {
+            // Generar el gráfico
+            Graphviz.fromGraph(g).render(Format.PNG).toFile(new File(ruta));
+        } catch (IOException ex) {
+            Logger.getLogger(Graficar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("El gráfico se ha generado correctamente como mapa.png");
+
+    }
+
+    public void graficarGrafoCompleto(ArrayList<Grafo> lista, String carpeta, String nombre) {
 
         // Crear el gráfico
         MutableGraph g = mutGraph("example2").setDirected(true);
@@ -40,7 +66,7 @@ public class Graficar {
 
         try {
             // Generar el gráfico
-            Graphviz.fromGraph(g).render(Format.PNG).toFile(new File("Images/mapaCompleto.png"));
+            Graphviz.fromGraph(g).render(Format.PNG).toFile(new File(carpeta + "/" + nombre + ".png"));
         } catch (IOException ex) {
             Logger.getLogger(Graficar.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -48,7 +74,7 @@ public class Graficar {
         System.out.println("El gráfico se ha generado correctamente como arreglo.png");
     }
 
-    public void graficarRutaPorRuta(ArrayList<Grafo> listaRutas, int index, int contadorImagenes) {
+    public void graficarRutaPorRuta(ArrayList<Grafo> listaRutas, int index, int contadorImagenes, String carpeta) {
         MutableGraph g = mutGraph("RutaporRuta").setDirected(true);
         for (Grafo grafo : listaRutas) {
             //String[] elementos = par.split("\\|"); // Dividir el par en sus elementos
@@ -67,8 +93,8 @@ public class Graficar {
         try {
             // Generar el gráfico
             Graphviz.fromGraph(g).render(Format.PNG).toFile(new File(
-                    "ImagesTemp/Ruta" + index +"_"+contadorImagenes+ ".png"));
-            System.out.println("Se ha guardado la imagen Ruta"+index +"_"+contadorImagenes+ ".png");
+                    carpeta + "/Ruta" + index + "_" + contadorImagenes + ".png"));
+            System.out.println("Se ha guardado la imagen Ruta" + index + "_" + contadorImagenes + ".png");
         } catch (IOException ex) {
             Logger.getLogger(Graficar.class.getName()).log(Level.SEVERE, null, ex);
         }
