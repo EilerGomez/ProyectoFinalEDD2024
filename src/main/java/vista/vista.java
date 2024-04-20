@@ -35,6 +35,8 @@ public class vista extends javax.swing.JFrame {
     public vista() {
         rutasController.eliminarContenidoCarpeta("ImagesTemp");
         initComponents();
+        rutasController.graficarGrafoCompleto();
+        llamarImagenGrafoCompleto();
         reloj = new Reloj(labelReloj);
         initOthersComponents(labelGrafo, jPanel1);
         initOthersComponents(labelRutaUnidad, jPanel2);
@@ -42,9 +44,9 @@ public class vista extends javax.swing.JFrame {
         rutasController.llenarTablasDestino(tablaDestino, Datos.Datos.listaGrafos);
         rutasController.llenarTablasOrigen(tablaOrigen, Datos.Datos.listaGrafos);
         this.vehiculoBTN.setSelected(true);
-        llamarImagenGrafoCompleto();
 
     }
+    
 
     private void initOthersComponents(JLabel label, JPanel panel) {
         // Crear un JPanel que contendrá al JLabel con la imagen

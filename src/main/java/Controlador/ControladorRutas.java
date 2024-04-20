@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import modelo.Grafo;
 import modelo.Horario;
+import utilidades.Graficar;
 
 /**
  *
@@ -239,6 +240,10 @@ public class ControladorRutas {
 
             contador++;
         }
+    }
+    public void graficarGrafoCompleto(){
+        Graficar graficar = new Graficar();
+        graficar.graficarGrafoCompleto(Datos.Datos.listaGrafos,"Images","mapaCompleto");
     }
     /*public void mejorRuta(JLabel labelMejorRuta, ArrayList<ArrayList<Grafo>> lista, boolean esVehiculo) {
         int contador = 1;
