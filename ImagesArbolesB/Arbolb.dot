@@ -1,0 +1,4 @@
+digraph ArbolB {
+node [shape=record];
+"76086344" [label="<f0>56|<f1>112|<f2>168|<f3>224"];
+}
