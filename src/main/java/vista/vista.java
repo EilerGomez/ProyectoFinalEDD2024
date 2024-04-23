@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import modelo.Grafo;
@@ -46,7 +47,6 @@ public class vista extends javax.swing.JFrame {
         this.vehiculoBTN.setSelected(true);
 
     }
-    
 
     private void initOthersComponents(JLabel label, JPanel panel) {
         // Crear un JPanel que contendrá al JLabel con la imagen
@@ -136,6 +136,7 @@ public class vista extends javax.swing.JFrame {
         labelMejorRuta = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         labelRutaUnidad = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -267,6 +268,13 @@ public class vista extends javax.swing.JFrame {
                 .addContainerGap(219, Short.MAX_VALUE))
         );
 
+        jButton2.setText("Editar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -282,6 +290,7 @@ public class vista extends javax.swing.JFrame {
         jDesktopPane1.setLayer(labelReloj, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(labelMejorRuta, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -301,7 +310,10 @@ public class vista extends javax.swing.JFrame {
                                 .addComponent(btnVerRutas, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
-                                .addComponent(labelReloj)
+                                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                    .addComponent(labelReloj)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jButton2))
                                 .addComponent(labelMejorRuta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(rutaUnitLabel)
@@ -327,7 +339,9 @@ public class vista extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(labelReloj)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labelReloj)
+                            .addComponent(jButton2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -461,7 +475,7 @@ public class vista extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.rutaUnitLabel.setText("" + comboRutas.getSelectedItem());
         if (comboRutas.getSelectedIndex() >= 0) {
-            rutasController.informacionDeRuta(jTextArea1, rutas.get(comboRutas.getSelectedIndex()), this.vehiculoBTN.isSelected());
+            rutasController.informacionDeRuta(jTextArea1, rutas.get(comboRutas.getSelectedIndex()), this.vehiculoBTN.isSelected(), labelReloj.getText());
         }
         llamarImagenDeCadaRuta("" + comboRutas.getSelectedItem());
     }//GEN-LAST:event_comboRutasActionPerformed
@@ -498,6 +512,12 @@ public class vista extends javax.swing.JFrame {
         datos.setLocationRelativeTo(null);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String nuevaHora = JOptionPane.showInputDialog(null, "Introduce la nueva hora (formato: HH:mm:ss):", "Modificar Hora", JOptionPane.PLAIN_MESSAGE);
+        reloj.modificarHora(nuevaHora);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -507,6 +527,7 @@ public class vista extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> comboRutas;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -328,7 +328,7 @@ public class vista2 extends javax.swing.JFrame {
     private void comboNuevasRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboNuevasRutasActionPerformed
         // TODO add your handling code here:
         if (comboNuevasRutas.getSelectedIndex() >= 0) {
-            rutasController.informacionDeRuta(jTextArea1, nuevasRutas.get(comboNuevasRutas.getSelectedIndex()), this.esVehiculo);
+            rutasController.informacionDeRuta(jTextArea1, nuevasRutas.get(comboNuevasRutas.getSelectedIndex()), this.esVehiculo,horaLabel.getText());
         }
         llamarImagenDeCadaRuta("" + comboNuevasRutas.getSelectedItem());
         this.btnMover.setEnabled(true);

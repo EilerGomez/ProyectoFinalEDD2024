@@ -5,6 +5,7 @@
 package Controlador;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
@@ -160,24 +161,30 @@ public class ControladorRutas {
         }
     }
 
-    public void informacionDeRuta(JTextArea area, ArrayList<Grafo> lista, boolean esVehiculo) {
+    public void informacionDeRuta(JTextArea area, ArrayList<Grafo> lista, boolean esVehiculo, String reloj) {
         int distancia = 0;
         double rapidezVehiculo = 0;
         double rapidezAPie = 0;
         int consumoGas = 0;
         int esfuerzoFisico = 0;
+        double probabilidadTrafico = 0;
 
         for (Grafo grafo : lista) {
             distancia += grafo.getDistancia();
-            rapidezVehiculo += grafo.getDistancia() / (grafo.getTiempo_vehiculo() * (1 + traerHorario(grafo).getProbabilidad_trafico()));
-            rapidezAPie += grafo.getDistancia() / grafo.getTiempo_pie();
+            rapidezVehiculo += (double) grafo.getDistancia() / ((double) grafo.getTiempo_vehiculo() * (1 + (double) traerHorario(grafo).getProbabilidad_trafico()));
+            System.out.println("Distancia " + grafo.getDistancia() + "/" + grafo.getTiempo_vehiculo() + "*1+" + traerHorario(grafo).getProbabilidad_trafico());
+            rapidezAPie += (double) grafo.getDistancia() / (double) grafo.getTiempo_pie();
             consumoGas += grafo.getConsumo_gas();
             esfuerzoFisico += grafo.getDesgaste_personal();
+            probabilidadTrafico += porbabilidadTrafico(reloj, grafo);
         }
         String informacion = "Distancia:" + distancia + " km";
+        DecimalFormat formato = new DecimalFormat("#.###");
         if (esVehiculo) {
             informacion += "\nCosumo de gas: " + consumoGas + " litros";
-            informacion += "\nVelocidad Vehiculo: " + rapidezVehiculo + " km/h";
+            informacion += "\nVelocidad Vehiculo: " + formato.format(rapidezVehiculo) + " km/h";
+            informacion += "\nProbabilidad total de trafico: " + formato.format(probabilidadTrafico);
+            informacion += "\nPromedio de trafico: " + formato.format(probabilidadTrafico / lista.size());
             if (hayDobleVia(lista)) {
                 informacion += "\nHay doble via";
             } else {
@@ -185,9 +192,23 @@ public class ControladorRutas {
             }
         } else {
             informacion += "\nDesgaste fisico: " + esfuerzoFisico;
-            informacion += "\nVelocidad a pie: " + rapidezAPie + " km/h";
+            informacion += "\nVelocidad a pie: " + formato.format(rapidezAPie) + " km/h";
         }
         area.setText(informacion);
+    }
+
+    public double porbabilidadTrafico(String hora, Grafo grafo) {
+
+        double probabilidad = 0.00;
+        Horario horar = traerHorario(grafo);
+        System.out.println("Horario: " + horar.getProbabilidad_trafico() / 100 + " Probabilidad trafico");
+        String[] split = hora.split(":");
+        System.out.println("Hora: " + split[0]);
+        if (Integer.parseInt(split[0]) >= horar.getHora_inicio() && Integer.parseInt(split[0]) <= horar.getHora_finalizada()) {
+            probabilidad = ((double) horar.getProbabilidad_trafico()) / 100;
+        }
+
+        return probabilidad;
     }
 
     public Horario traerHorario(Grafo grafo) {
@@ -241,9 +262,10 @@ public class ControladorRutas {
             contador++;
         }
     }
-    public void graficarGrafoCompleto(){
+
+    public void graficarGrafoCompleto() {
         Graficar graficar = new Graficar();
-        graficar.graficarGrafoCompleto(Datos.Datos.listaGrafos,"Images","mapaCompleto");
+        graficar.graficarGrafoCompleto(Datos.Datos.listaGrafos, "Images", "mapaCompleto");
     }
     /*public void mejorRuta(JLabel labelMejorRuta, ArrayList<ArrayList<Grafo>> lista, boolean esVehiculo) {
         int contador = 1;
