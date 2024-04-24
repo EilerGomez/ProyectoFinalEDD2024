@@ -11,11 +11,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import modelo.Grafo;
 
 public class ArbolB<T extends Comparable<T>> {
+    private ArrayList<ArrayList<Grafo>> lista = new ArrayList<>();
 
     private static final int M = 5; // Grado máximo del árbol B
-
+     private ArrayList<Hoja> valorTabla=new ArrayList<>();
     private Nodo<T> raiz;
 
     // Constructor
@@ -24,7 +26,7 @@ public class ArbolB<T extends Comparable<T>> {
     }
 
     // Método para insertar un elemento en el árbol
-    public void insertar(T valor, int indiceTabla) {
+    public void insertar(T valor, int indiceTabla, int valorN) {
         // Si la raíz está llena, se debe dividir
         if (raiz.getNumElementos() == M - 1) {
             Nodo<T> nuevaRaiz = new Nodo<>(M, false);
@@ -33,7 +35,7 @@ public class ArbolB<T extends Comparable<T>> {
             // Actualizar la raíz
             raiz = nuevaRaiz;
         }
-        raiz.insertarNoLleno(valor, indiceTabla);
+        raiz.insertarNoLleno(valor, indiceTabla, valorN);
     }
 
     // Método para imprimir el árbol (recorrido inorden)
@@ -46,7 +48,7 @@ public class ArbolB<T extends Comparable<T>> {
 
         private int numElementos; // Número de elementos en el nodo
         private List<T> valores;
-        private ArrayList<String> valorTabla;
+       
         private List<Nodo<T>> hijos;
         private boolean esHoja;
 
@@ -56,7 +58,6 @@ public class ArbolB<T extends Comparable<T>> {
             this.esHoja = hoja;
             this.valores = new ArrayList<>(grado - 1);
             this.hijos = new ArrayList<>(grado);
-            this.valorTabla=new ArrayList<>();
         }
 
         // Métodos para obtener el número de elementos y si es hoja
@@ -74,14 +75,15 @@ public class ArbolB<T extends Comparable<T>> {
         }
 
         // Método para insertar un valor en un nodo que no está lleno
-        public void insertarNoLleno(T valor, int indiceTabla) {
+        public void insertarNoLleno(T valor, int indiceTabla, int valorN) {
             int i = numElementos - 1;
             if (esHoja) {
                 while (i >= 0 && valor.compareTo(valores.get(i)) < 0) {
                     i--;
                 }
                 valores.add(i + 1, valor);
-                valorTabla.add(""+indiceTabla);
+                Hoja hoja= new Hoja(indiceTabla,valorN);
+                valorTabla.add(hoja);
                 numElementos++;
             } else {
                 // Encontrar el hijo en el que se debe insertar el valor
@@ -96,7 +98,7 @@ public class ArbolB<T extends Comparable<T>> {
                         indiceHijo++;
                     }
                 }
-                hijos.get(indiceHijo).insertarNoLleno(valor, indiceTabla);
+                hijos.get(indiceHijo).insertarNoLleno(valor, indiceTabla, valorN);
             }
         }
 
@@ -139,13 +141,14 @@ public class ArbolB<T extends Comparable<T>> {
     }
 
     // Método para graficar el árbol B utilizando Graphviz
-    public void graficar(String archivoDot, String archivoImagen) {
+    public void graficar(String archivoDot, String archivoImagen,ArrayList<ArrayList<Grafo>> lista) {
+        this.lista=lista;
         try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(archivoDot)))) {
             out.println("digraph ArbolB {");
             out.println("node [shape=record];");
 
             // Llamada a un método recursivo para generar las definiciones de nodos y enlaces
-            graficarNodo((Nodo<T>) raiz, out);
+            graficarNodo((Nodo<T>) raiz, out, this.lista);
 
             out.println("}");
         } catch (IOException e) {
@@ -168,13 +171,14 @@ public class ArbolB<T extends Comparable<T>> {
     }
 
     // Método auxiliar recursivo para generar la definición de nodos y enlaces
-    private void graficarNodo(Nodo<T> nodo, PrintWriter out) {
+    private void graficarNodo(Nodo<T> nodo, PrintWriter out, ArrayList<ArrayList<Grafo>> lista) {
         out.print("\"" + nodo.hashCode() + "\" [label=\"");
 
         // Agregar valores del nodo al label
         for (int i = 0; i < M - 1; i++) {
             if (i < nodo.getNumElementos()) {
-                out.print("<f" + i + ">" + nodo.valores.get(i));
+                
+                out.print("<f" + i + ">" + valorGraficar(this.lista.get(devolverIndiceTabla(nodo.valores.get(i).toString(), nodo))));
             } else {
                 out.print("|<f" + i + ">" + " ");
             }
@@ -187,15 +191,37 @@ public class ArbolB<T extends Comparable<T>> {
         // Generar enlaces a los hijos
         for (int i = 0; i <= nodo.getNumElementos(); i++) {
             if (!nodo.esHoja() && i < nodo.hijos.size()) {
-                graficarNodo(nodo.hijos.get(i), out); // Llamada recursiva
+                graficarNodo(nodo.hijos.get(i), out, this.lista); // Llamada recursiva
                 out.println("\"" + nodo.hashCode() + "\":f" + i + " -> \"" + nodo.hijos.get(i).hashCode() + "\";");
             }
         }
     }
+    
+    private int devolverIndiceTabla(String valor,Nodo<T> nodo ){
+        int valorN = Integer.parseInt(valor);
+        Hoja h = new Hoja(0, 0);
+        for (Hoja hoj : valorTabla) {
+            if(hoj.getValor()==valorN){
+                h=hoj;
+                break;
+            }
+        }
+        return h.getLlave();
+    }
+    
+    private String valorGraficar(ArrayList<Grafo> lista){
+        String valor =lista.get(0).getOrigen();
+        for (int i = 1; i < lista.size(); i++) {
+            valor+="_"+lista.get(i).getOrigen();
+        }
+        valor+="_"+lista.get(lista.size()-1).getDestino();
+        System.out.println(valor);
+        return valor;
+    }
 
     // Método main para probar la implementación
     public static void main(String[] args) {
-        ArbolB<Integer> arbol = new ArbolB<>();
+        /*ArbolB<Integer> arbol = new ArbolB<>();
         arbol.insertar(5,0);
         arbol.insertar(6,0);
         arbol.insertar(10,0);
@@ -209,6 +235,6 @@ public class ArbolB<T extends Comparable<T>> {
         arbol.insertar(28,0);
         arbol.insertar(14,0);
         arbol.imprimir();
-        arbol.graficar("arbolb.dot", "arbolb.png");
+        arbol.graficar("arbolb.dot", "arbolb.png");*/
     }
 }

@@ -37,6 +37,10 @@ public class vista2 extends javax.swing.JFrame {
     public int contadorImagenes = 1;
     public ArrayList<String> listaContadorImages = new ArrayList<>();
 
+    /*variables que sirven para las funcionalidades*/
+    private int contadorImagesFuncionalidades = 1;
+    public ArrayList<String> listaImagesFUncionalidades = new ArrayList<>();
+
     /**
      * Creates new form vista2
      */
@@ -356,6 +360,11 @@ public class vista2 extends javax.swing.JFrame {
         jLabel7.setText("Seleccione una de las funcionalidades");
 
         jButton1.setText("Ver arbol");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jDesktopPane2.setLayer(comboFuncionalidades, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -378,17 +387,17 @@ public class vista2 extends javax.swing.JFrame {
                             .addComponent(jLabel5)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(124, 124, 124)
-                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(66, 66, 66))
+                        .addComponent(jLabel6)
+                        .addGap(307, 307, 307))
                     .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                                .addComponent(comboFuncionalidades, javax.swing.GroupLayout.PREFERRED_SIZE, 584, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(48, 48, 48)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jDesktopPane2Layout.createSequentialGroup()
+                                    .addComponent(comboFuncionalidades, javax.swing.GroupLayout.PREFERRED_SIZE, 584, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(48, 48, 48)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jDesktopPane2Layout.setVerticalGroup(
@@ -404,13 +413,10 @@ public class vista2 extends javax.swing.JFrame {
                 .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDesktopPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jDesktopPane2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -423,7 +429,7 @@ public class vista2 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 890, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -438,7 +444,7 @@ public class vista2 extends javax.swing.JFrame {
     private void comboNuevasRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboNuevasRutasActionPerformed
         // TODO add your handling code here:
         if (comboNuevasRutas.getSelectedIndex() >= 0) {
-            rutasController.informacionDeRuta(jTextArea1, nuevasRutas.get(comboNuevasRutas.getSelectedIndex()), this.esVehiculo,horaLabel.getText());
+            rutasController.informacionDeRuta(jTextArea1, nuevasRutas.get(comboNuevasRutas.getSelectedIndex()), this.esVehiculo, horaLabel.getText());
         }
         llamarImagenDeCadaRuta("" + comboNuevasRutas.getSelectedItem());
         this.btnMover.setEnabled(true);
@@ -494,19 +500,28 @@ public class vista2 extends javax.swing.JFrame {
             rutasController.mejorRuta(labelMejorRuta, nuevasRutas, esVehiculo);
         }
         Graficar graficar = new Graficar();
-        
+
         graficar.graficarNuevoGrafoCompleto(nuevasRutas, "ImagesTemp2/mapa_" + contadorImagenes + ".png");
         llamarImagenALabelGrafo("ImagesTemp2/mapa_" + contadorImagenes + ".png");
         this.comboNuevasRutas.setEnabled(true);
         this.btnSeleccionarPunto.setEnabled(false);
         contadorImagenes++;
-        
-        //funcion para generar cada arbol de cada ruta segun su orden
-        controladorRutas2.generarArbolesBEImagenes(0, nuevasRutas);
-    }//GEN-LAST:event_btnSeleccionarPuntoActionPerformed
 
+        //funcion para generar cada arbol de cada ruta segun su orden
+        generarImagesFuncionalidades();
+    }//GEN-LAST:event_btnSeleccionarPuntoActionPerformed
+    private void generarImagesFuncionalidades() {
+        rutasController.eliminarContenidoCarpeta("ImagesArbolesB");
+        listaImagesFUncionalidades.clear();
+        for (int i = 0; i < 6; i++) {
+            controladorRutas2.generarArbolesBEImagenes(i, nuevasRutas, contadorImagesFuncionalidades, esVehiculo, horaLabel);
+        }
+
+        listaImagesFUncionalidades.add("" + contadorImagesFuncionalidades);
+
+        contadorImagesFuncionalidades++;
+    }
     private void btnMoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoverActionPerformed
-        // TODO add your handling code here:
         controladorRutas2.llenarTablaDePosicionesOLugares(jTable1, nuevasRutas.get(comboNuevasRutas.getSelectedIndex()));
 
         rutaElejida.setIcon(null);
@@ -521,6 +536,16 @@ public class vista2 extends javax.swing.JFrame {
         String nuevaHora = JOptionPane.showInputDialog(null, "Introduce la nueva hora (formato: HH:mm:ss):", "Modificar Hora", JOptionPane.PLAIN_MESSAGE);
         reloj.modificarHora(nuevaHora);
     }//GEN-LAST:event_EditarHoraActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String ruta = "ImagesArbolesB/arolbB" + comboFuncionalidades.getSelectedIndex() + "" + listaImagesFUncionalidades.get(0) + ".png";
+        vistaArbol vistaA = new vistaArbol(ruta);
+        vistaA.setVisible(true);
+        vistaA.setResizable(false);
+        vistaA.setEnabled(true);
+        vistaA.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

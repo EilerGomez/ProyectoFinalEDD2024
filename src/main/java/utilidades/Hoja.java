@@ -12,7 +12,9 @@ public class Hoja {
     private int llave;//valor con el que se va almacenar cada Hoja
     private int valor;//el id del arraylist
 
-    public Hoja() {
+    public Hoja(int ll, int valor) {
+        this.llave=ll;
+        this.valor=valor;
     }
 
     public int getLlave() {
