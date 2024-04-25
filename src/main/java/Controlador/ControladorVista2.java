@@ -12,6 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import modelo.Grafo;
 import modelo.Horario;
 import utilidades.ArbolB;
+import utilidades.Graficar;
+import utilidades.Hoja;
 
 /**
  *
@@ -21,6 +23,7 @@ public class ControladorVista2 {
 
     ControladorRutas controllerR = new ControladorRutas();
     ArbolB arbolB = new ArbolB();
+    Graficar graficar = new Graficar();
 
     public void llenarTablaDePosicionesOLugares(JTable tabla, ArrayList<Grafo> lista) {
         DefaultTableModel modelo = new DefaultTableModel();
@@ -77,6 +80,10 @@ public class ControladorVista2 {
                     }
                     arbolB.insertar(consumo, i, consumo);
                 }
+                System.out.println("Menor: " + devolverValorMenor(arbolB.valorTabla));
+                System.out.println("Mayor: " + devolverValorMayor(arbolB.valorTabla));
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMenor(arbolB.valorTabla)), 0, contador, "ImagesArbolesB", "RutaMin");
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMayor(arbolB.valorTabla)), 0, contador, "ImagesArbolesB", "RutaMax");
                 arbolB.graficar("ImagesArbolesB/Arbolb.dot", "ImagesArbolesB/arolbB" + funcionalidad + "" + contador + ".png", lista);
                 break;
             case 1:
@@ -87,6 +94,9 @@ public class ControladorVista2 {
                     }
                     arbolB.insertar(consumo, i, consumo);
                 }
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMenor(arbolB.valorTabla)), 1, contador, "ImagesArbolesB", "RutaMin");
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMayor(arbolB.valorTabla)), 1, contador, "ImagesArbolesB", "RutaMax");
+
                 arbolB.graficar("ImagesArbolesB/Arbolb.dot", "ImagesArbolesB/arolbB" + funcionalidad + "" + contador + ".png", lista);
                 break;
             case 2:
@@ -97,6 +107,9 @@ public class ControladorVista2 {
                     }
                     arbolB.insertar(consumo, i, consumo);
                 }
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMenor(arbolB.valorTabla)), 2, contador, "ImagesArbolesB", "RutaMin");
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMayor(arbolB.valorTabla)), 2, contador, "ImagesArbolesB", "RutaMax");
+
                 arbolB.graficar("ImagesArbolesB/Arbolb.dot", "ImagesArbolesB/arolbB" + funcionalidad + "" + contador + ".png", lista);
                 break;
             case 3:
@@ -107,6 +120,8 @@ public class ControladorVista2 {
                     }
                     arbolB.insertar(consumo, i, consumo);
                 }
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMenor(arbolB.valorTabla)), 3, contador, "ImagesArbolesB", "RutaMin");
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMayor(arbolB.valorTabla)), 3, contador, "ImagesArbolesB", "RutaMax");
                 arbolB.graficar("ImagesArbolesB/Arbolb.dot", "ImagesArbolesB/arolbB" + funcionalidad + "" + contador + ".png", lista);
                 break;
             case 4:
@@ -117,6 +132,8 @@ public class ControladorVista2 {
                     }
                     arbolB.insertar(consumo, i, consumo);
                 }
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMenor(arbolB.valorTabla)), 4, contador, "ImagesArbolesB", "RutaMin");
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMayor(arbolB.valorTabla)), 4, contador, "ImagesArbolesB", "RutaMax");
                 arbolB.graficar("ImagesArbolesB/Arbolb.dot", "ImagesArbolesB/arolbB" + funcionalidad + "" + contador + ".png", lista);
                 break;
             case 5:
@@ -125,13 +142,15 @@ public class ControladorVista2 {
                     for (Grafo grafo : lista.get(i)) {
                         consumo += (grafo.getDistancia());
                         if (isVehiculo) {
-                            consumo += (grafo.getTiempo_vehiculo() + propabilidadTrafico(grafo,labelReloj));
+                            consumo += (grafo.getTiempo_vehiculo() + propabilidadTrafico(grafo, labelReloj));
                         } else {
                             consumo += grafo.getTiempo_pie();
                         }
                     }
                     arbolB.insertar(consumo, i, consumo);
                 }
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMenor(arbolB.valorTabla)), 5, contador, "ImagesArbolesB", "RutaMin");
+                graficar.graficarRutaPorRuta(lista.get(devolverValorMayor(arbolB.valorTabla)), 5, contador, "ImagesArbolesB", "RutaMax");
                 arbolB.graficar("ImagesArbolesB/Arbolb.dot", "ImagesArbolesB/arolbB" + funcionalidad + "" + contador + ".png", lista);
                 break;
         }
@@ -142,9 +161,45 @@ public class ControladorVista2 {
         String[] splits = labelReloj.getText().split(":");
         Horario h = controllerR.traerHorario(grafo);
         if (Integer.parseInt(splits[0]) >= h.getHora_inicio() && Integer.parseInt(splits[0]) <= h.getHora_finalizada()) {
-            probabilidad =  h.getProbabilidad_trafico();
+            probabilidad = h.getProbabilidad_trafico();
         }
 
         return probabilidad;
+    }
+
+    public int devolverValorMenor(ArrayList<Hoja> valor) {
+        int indexTabla = 0;
+        int menor = 0;
+        for (Hoja hoja : valor) {
+            if (menor == 0) {
+                menor = hoja.getValor();
+                indexTabla = hoja.getLlave();
+            } else {
+                if (hoja.getValor() < menor) {
+                    menor = hoja.getValor();
+                    indexTabla = hoja.getLlave();
+                }
+            }
+
+        }
+        return indexTabla;
+    }
+
+    public int devolverValorMayor(ArrayList<Hoja> valor) {
+        int indexTabla = 0;
+        int menor = 0;
+        for (Hoja hoja : valor) {
+            if (menor == 0) {
+                menor = hoja.getValor();
+                indexTabla = hoja.getLlave();
+            } else {
+                if (hoja.getValor() > menor) {
+                    menor = hoja.getValor();
+                    indexTabla = hoja.getLlave();
+                }
+            }
+
+        }
+        return indexTabla;
     }
 }

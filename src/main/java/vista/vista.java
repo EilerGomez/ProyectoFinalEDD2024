@@ -459,7 +459,7 @@ public class vista extends javax.swing.JFrame {
             Graficar graficar = new Graficar();
             int indice = 1;
             for (ArrayList<Grafo> ruta : rutas) {
-                graficar.graficarRutaPorRuta(ruta, indice, contadorImagenes, "ImagesTemp");
+                graficar.graficarRutaPorRuta(ruta, indice, contadorImagenes, "ImagesTemp","Ruta");
                 listaContadorImages.add("" + contadorImagenes);
                 contadorImagenes++;
                 indice++;

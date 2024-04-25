@@ -4,7 +4,6 @@
  */
 package utilidades;
 
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,10 +13,11 @@ import java.util.List;
 import modelo.Grafo;
 
 public class ArbolB<T extends Comparable<T>> {
+
     private ArrayList<ArrayList<Grafo>> lista = new ArrayList<>();
 
     private static final int M = 5; // Grado máximo del árbol B
-     private ArrayList<Hoja> valorTabla=new ArrayList<>();
+    public ArrayList<Hoja> valorTabla = new ArrayList<>();
     private Nodo<T> raiz;
 
     // Constructor
@@ -48,7 +48,7 @@ public class ArbolB<T extends Comparable<T>> {
 
         private int numElementos; // Número de elementos en el nodo
         private List<T> valores;
-       
+
         private List<Nodo<T>> hijos;
         private boolean esHoja;
 
@@ -82,7 +82,7 @@ public class ArbolB<T extends Comparable<T>> {
                     i--;
                 }
                 valores.add(i + 1, valor);
-                Hoja hoja= new Hoja(indiceTabla,valorN);
+                Hoja hoja = new Hoja(indiceTabla, valorN);
                 valorTabla.add(hoja);
                 numElementos++;
             } else {
@@ -141,8 +141,8 @@ public class ArbolB<T extends Comparable<T>> {
     }
 
     // Método para graficar el árbol B utilizando Graphviz
-    public void graficar(String archivoDot, String archivoImagen,ArrayList<ArrayList<Grafo>> lista) {
-        this.lista=lista;
+    public void graficar(String archivoDot, String archivoImagen, ArrayList<ArrayList<Grafo>> lista) {
+        this.lista = lista;
         try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(archivoDot)))) {
             out.println("digraph ArbolB {");
             out.println("node [shape=record];");
@@ -177,7 +177,7 @@ public class ArbolB<T extends Comparable<T>> {
         // Agregar valores del nodo al label
         for (int i = 0; i < M - 1; i++) {
             if (i < nodo.getNumElementos()) {
-                
+
                 out.print("<f" + i + ">" + valorGraficar(this.lista.get(devolverIndiceTabla(nodo.valores.get(i).toString(), nodo))));
             } else {
                 out.print("|<f" + i + ">" + " ");
@@ -196,25 +196,25 @@ public class ArbolB<T extends Comparable<T>> {
             }
         }
     }
-    
-    private int devolverIndiceTabla(String valor,Nodo<T> nodo ){
+
+    private int devolverIndiceTabla(String valor, Nodo<T> nodo) {
         int valorN = Integer.parseInt(valor);
         Hoja h = new Hoja(0, 0);
         for (Hoja hoj : valorTabla) {
-            if(hoj.getValor()==valorN){
-                h=hoj;
+            if (hoj.getValor() == valorN) {
+                h = hoj;
                 break;
             }
         }
         return h.getLlave();
     }
-    
-    private String valorGraficar(ArrayList<Grafo> lista){
-        String valor =lista.get(0).getOrigen();
+
+    private String valorGraficar(ArrayList<Grafo> lista) {
+        String valor = lista.get(0).getOrigen();
         for (int i = 1; i < lista.size(); i++) {
-            valor+="_"+lista.get(i).getOrigen();
+            valor += "_" + lista.get(i).getOrigen();
         }
-        valor+="_"+lista.get(lista.size()-1).getDestino();
+        valor += "_" + lista.get(lista.size() - 1).getDestino();
         System.out.println(valor);
         return valor;
     }

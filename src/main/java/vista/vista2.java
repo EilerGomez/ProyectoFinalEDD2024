@@ -57,6 +57,8 @@ public class vista2 extends javax.swing.JFrame {
         reloj = new Reloj(horaLabel);
         initOthersComponents(rutaElejida, jPanel1);
         initOthersComponents(rutaIndividual, jPanel2);
+        initOthersComponents(labelRutaMejor, jPanel3);
+        initOthersComponents(labelRutaPeor, jPanel4);
         llamarImagenALabelGrafo(rutaGrafoORuta);
         controladorRutas2.llenarTablaDePosicionesOLugares(jTable1, listarutas);
         this.labelPosicionActual.setText("Posicion actual: " + listarutas.get(0).getOrigen());
@@ -121,14 +123,16 @@ public class vista2 extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         horaLabel = new javax.swing.JLabel();
         btnSeleccionarPunto = new javax.swing.JButton();
-        labelPosicionActual = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         rutaIndividual = new javax.swing.JLabel();
+        labelPosicionActual = new javax.swing.JLabel();
         EditarHora = new javax.swing.JButton();
         jDesktopPane2 = new javax.swing.JDesktopPane();
         comboFuncionalidades = new javax.swing.JComboBox<>();
-        jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
+        labelRutaPeor = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        labelRutaMejor = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -208,8 +212,6 @@ public class vista2 extends javax.swing.JFrame {
             }
         });
 
-        labelPosicionActual.setText("Posicion Actual:");
-
         rutaIndividual.setText("-");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -228,6 +230,8 @@ public class vista2 extends javax.swing.JFrame {
                 .addComponent(rutaIndividual)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        labelPosicionActual.setText("Posicion Actual:");
 
         EditarHora.setText("Editar");
         EditarHora.addActionListener(new java.awt.event.ActionListener() {
@@ -248,8 +252,8 @@ public class vista2 extends javax.swing.JFrame {
         jDesktopPane1.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(horaLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnSeleccionarPunto, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(labelPosicionActual, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(labelPosicionActual, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(EditarHora, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
@@ -331,26 +335,48 @@ public class vista2 extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Principal", jDesktopPane1);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 377, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 329, Short.MAX_VALUE)
-        );
+        comboFuncionalidades.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboFuncionalidadesActionPerformed(evt);
+            }
+        });
+
+        labelRutaPeor.setText("-");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 363, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelRutaPeor)
+                .addContainerGap(313, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 329, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelRutaPeor)
+                .addContainerGap(304, Short.MAX_VALUE))
+        );
+
+        labelRutaMejor.setText("-");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelRutaMejor)
+                .addContainerGap(327, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelRutaMejor)
+                .addContainerGap(304, Short.MAX_VALUE))
         );
 
         jLabel5.setText("Mas conveniente");
@@ -367,8 +393,8 @@ public class vista2 extends javax.swing.JFrame {
         });
 
         jDesktopPane2.setLayer(comboFuncionalidades, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane2.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jPanel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane2.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jLabel5, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jLabel6, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane2.setLayer(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -472,6 +498,28 @@ public class vista2 extends javax.swing.JFrame {
             // Aquí puedes mostrar un mensaje de error o tomar otra acción según tus necesidades
         }
     }
+
+    private void LLamarImagesFuncionalidades(String direccionImg, JLabel ruta) {
+        if (comboFuncionalidades.getSelectedIndex() >= 0) {
+            String imagePath = "";
+
+            imagePath = direccionImg;
+            File imageFile = new File(imagePath);
+
+            // Verificartrue si el archivo de imagen existe
+            if (imageFile.exists()) {
+                // Si el archivo existe, cargar la imagen
+                ImageIcon icono = new ImageIcon(imagePath);
+                ruta.setIcon(icono);
+                System.out.println("Imagen " + direccionImg + " cargada correctamente.");
+            } else {
+                // Si el archivo no existe, mostrar un mensaje de error o tomar otra acción según sea necesario
+                System.out.println("La imagen " + direccionImg + " no existe en el sistema de archivos.");
+                // Aquí puedes mostrar un mensaje de error o tomar otra acción según tus necesidades
+            }
+        }
+
+    }
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         this.btnSeleccionarPunto.setEnabled(true);
@@ -491,7 +539,7 @@ public class vista2 extends javax.swing.JFrame {
             int indice = 1;
             System.out.println("Tamanio rutas: " + nuevasRutas.size());
             for (ArrayList<Grafo> ruta : nuevasRutas) {
-                graficar.graficarRutaPorRuta(ruta, indice, contadorImagenes, "ImagesTemp2");
+                graficar.graficarRutaPorRuta(ruta, indice, contadorImagenes, "ImagesTemp2", "Ruta");
                 listaContadorImages.add("" + contadorImagenes);
                 contadorImagenes++;
                 indice++;
@@ -547,6 +595,15 @@ public class vista2 extends javax.swing.JFrame {
         vistaA.setLocationRelativeTo(null);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void comboFuncionalidadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFuncionalidadesActionPerformed
+        // TODO add your handling code here:
+        if (listaImagesFUncionalidades.size() > 0) {
+            LLamarImagesFuncionalidades("ImagesArbolesB/RutaMin" + comboFuncionalidades.getSelectedIndex() + "_" + listaImagesFUncionalidades.get(0) + ".png", labelRutaMejor);
+            LLamarImagesFuncionalidades("ImagesArbolesB/RutaMax" + comboFuncionalidades.getSelectedIndex() + "_" +listaImagesFUncionalidades.get(0) + ".png", labelRutaPeor);
+        }
+        System.out.println("ImagesArbolesB/RutaMin" + comboFuncionalidades.getSelectedIndex() + "_" + contadorImagesFuncionalidades + ".png");
+    }//GEN-LAST:event_comboFuncionalidadesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -579,6 +636,8 @@ public class vista2 extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel labelMejorRuta;
     private javax.swing.JLabel labelPosicionActual;
+    private javax.swing.JLabel labelRutaMejor;
+    private javax.swing.JLabel labelRutaPeor;
     private javax.swing.JLabel rutaElejida;
     private javax.swing.JLabel rutaIndividual;
     // End of variables declaration//GEN-END:variables
