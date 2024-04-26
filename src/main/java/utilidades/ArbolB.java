@@ -26,7 +26,7 @@ public class ArbolB<T extends Comparable<T>> {
     }
 
     // Método para insertar un elemento en el árbol
-    public void insertar(T valor, int indiceTabla, int valorN) {
+    public void insertar(T valor, int indiceTabla, double valorN) {
         // Si la raíz está llena, se debe dividir
         if (raiz.getNumElementos() == M - 1) {
             Nodo<T> nuevaRaiz = new Nodo<>(M, false);
@@ -75,7 +75,7 @@ public class ArbolB<T extends Comparable<T>> {
         }
 
         // Método para insertar un valor en un nodo que no está lleno
-        public void insertarNoLleno(T valor, int indiceTabla, int valorN) {
+        public void insertarNoLleno(T valor, int indiceTabla, double valorN) {
             int i = numElementos - 1;
             if (esHoja) {
                 while (i >= 0 && valor.compareTo(valores.get(i)) < 0) {
@@ -198,7 +198,7 @@ public class ArbolB<T extends Comparable<T>> {
     }
 
     private int devolverIndiceTabla(String valor, Nodo<T> nodo) {
-        int valorN = Integer.parseInt(valor);
+        double valorN = Double.valueOf(valor);
         Hoja h = new Hoja(0, 0);
         for (Hoja hoj : valorTabla) {
             if (hoj.getValor() == valorN) {

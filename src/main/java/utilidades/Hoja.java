@@ -10,9 +10,9 @@ package utilidades;
  */
 public class Hoja {
     private int llave;//valor con el que se va almacenar cada Hoja
-    private int valor;//el id del arraylist
+    private double valor;//el id del arraylist
 
-    public Hoja(int ll, int valor) {
+    public Hoja(int ll, double valor) {
         this.llave=ll;
         this.valor=valor;
     }
@@ -25,7 +25,7 @@ public class Hoja {
         this.llave = llave;
     }
 
-    public int getValor() {
+    public double getValor() {
         return valor;
     }
 

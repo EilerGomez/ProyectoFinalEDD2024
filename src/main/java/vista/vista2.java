@@ -513,6 +513,7 @@ public class vista2 extends javax.swing.JFrame {
                 ruta.setIcon(icono);
                 System.out.println("Imagen " + direccionImg + " cargada correctamente.");
             } else {
+                ruta.setIcon(null);
                 // Si el archivo no existe, mostrar un mensaje de error o tomar otra acción según sea necesario
                 System.out.println("La imagen " + direccionImg + " no existe en el sistema de archivos.");
                 // Aquí puedes mostrar un mensaje de error o tomar otra acción según tus necesidades
@@ -562,7 +563,13 @@ public class vista2 extends javax.swing.JFrame {
         rutasController.eliminarContenidoCarpeta("ImagesArbolesB");
         listaImagesFUncionalidades.clear();
         for (int i = 0; i < 6; i++) {
-            controladorRutas2.generarArbolesBEImagenes(i, nuevasRutas, contadorImagesFuncionalidades, esVehiculo, horaLabel);
+            if (esVehiculo && (i == 0 || i == 3)) {
+                controladorRutas2.generarArbolesBEImagenes(i, nuevasRutas, contadorImagesFuncionalidades, esVehiculo, horaLabel);
+            } else if (!esVehiculo && (i == 1 || i == 4)) {
+                controladorRutas2.generarArbolesBEImagenes(i, nuevasRutas, contadorImagesFuncionalidades, esVehiculo, horaLabel);
+            } else if(i==2||i==5) {
+                controladorRutas2.generarArbolesBEImagenes(i, nuevasRutas, contadorImagesFuncionalidades, esVehiculo, horaLabel);
+            }
         }
 
         listaImagesFUncionalidades.add("" + contadorImagesFuncionalidades);
@@ -599,7 +606,7 @@ public class vista2 extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (listaImagesFUncionalidades.size() > 0) {
             LLamarImagesFuncionalidades("ImagesArbolesB/RutaMin" + comboFuncionalidades.getSelectedIndex() + "_" + listaImagesFUncionalidades.get(0) + ".png", labelRutaMejor);
-            LLamarImagesFuncionalidades("ImagesArbolesB/RutaMax" + comboFuncionalidades.getSelectedIndex() + "_" +listaImagesFUncionalidades.get(0) + ".png", labelRutaPeor);
+            LLamarImagesFuncionalidades("ImagesArbolesB/RutaMax" + comboFuncionalidades.getSelectedIndex() + "_" + listaImagesFUncionalidades.get(0) + ".png", labelRutaPeor);
         }
         System.out.println("ImagesArbolesB/RutaMin" + comboFuncionalidades.getSelectedIndex() + "_" + contadorImagesFuncionalidades + ".png");
     }//GEN-LAST:event_comboFuncionalidadesActionPerformed

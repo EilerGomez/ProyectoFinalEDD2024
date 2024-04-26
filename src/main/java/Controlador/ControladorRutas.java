@@ -171,7 +171,7 @@ public class ControladorRutas {
 
         for (Grafo grafo : lista) {
             distancia += grafo.getDistancia();
-            rapidezVehiculo += (double) grafo.getDistancia() / ((double) grafo.getTiempo_vehiculo() * (1 + (double) traerHorario(grafo).getProbabilidad_trafico()));
+            rapidezVehiculo += (double) grafo.getDistancia() / ((double) grafo.getTiempo_vehiculo() * (1 + porbabilidadTrafico(reloj,grafo)));
             System.out.println("Distancia " + grafo.getDistancia() + "/" + grafo.getTiempo_vehiculo() + "*1+" + traerHorario(grafo).getProbabilidad_trafico());
             rapidezAPie += (double) grafo.getDistancia() / (double) grafo.getTiempo_pie();
             consumoGas += grafo.getConsumo_gas();

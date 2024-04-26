@@ -74,7 +74,7 @@ public class ControladorVista2 {
         switch (funcionalidad) {
             case 0://en base a la gasolina si es vehiculo
                 for (int i = 0; i < lista.size(); i++) {
-                    int consumo = 0;
+                    double consumo = 0;
                     for (Grafo grafo : lista.get(i)) {
                         consumo += grafo.getConsumo_gas();
                     }
@@ -88,7 +88,7 @@ public class ControladorVista2 {
                 break;
             case 1:
                 for (int i = 0; i < lista.size(); i++) {
-                    int consumo = 0;
+                    double consumo = 0;
                     for (Grafo grafo : lista.get(i)) {
                         consumo += grafo.getDesgaste_personal();
                     }
@@ -101,7 +101,7 @@ public class ControladorVista2 {
                 break;
             case 2:
                 for (int i = 0; i < lista.size(); i++) {
-                    int consumo = 0;
+                    double consumo = 0;
                     for (Grafo grafo : lista.get(i)) {
                         consumo += grafo.getDistancia();
                     }
@@ -114,7 +114,7 @@ public class ControladorVista2 {
                 break;
             case 3:
                 for (int i = 0; i < lista.size(); i++) {
-                    int consumo = 0;
+                    double consumo = 0;
                     for (Grafo grafo : lista.get(i)) {
                         consumo += (grafo.getDistancia() + grafo.getConsumo_gas());
                     }
@@ -126,7 +126,7 @@ public class ControladorVista2 {
                 break;
             case 4:
                 for (int i = 0; i < lista.size(); i++) {
-                    int consumo = 0;
+                    double consumo = 0;
                     for (Grafo grafo : lista.get(i)) {
                         consumo += (grafo.getDistancia() + grafo.getDesgaste_personal());
                     }
@@ -138,14 +138,9 @@ public class ControladorVista2 {
                 break;
             case 5:
                 for (int i = 0; i < lista.size(); i++) {
-                    int consumo = 0;
+                    double consumo = 0;
                     for (Grafo grafo : lista.get(i)) {
-                        consumo += (grafo.getDistancia());
-                        if (isVehiculo) {
-                            consumo += (grafo.getTiempo_vehiculo() + propabilidadTrafico(grafo, labelReloj));
-                        } else {
-                            consumo += grafo.getTiempo_pie();
-                        }
+                        consumo+=traerVelocidad(isVehiculo, grafo, labelReloj.getText());
                     }
                     arbolB.insertar(consumo, i, consumo);
                 }
@@ -169,7 +164,7 @@ public class ControladorVista2 {
 
     public int devolverValorMenor(ArrayList<Hoja> valor) {
         int indexTabla = 0;
-        int menor = 0;
+        double menor = 0;
         for (Hoja hoja : valor) {
             if (menor == 0) {
                 menor = hoja.getValor();
@@ -187,7 +182,7 @@ public class ControladorVista2 {
 
     public int devolverValorMayor(ArrayList<Hoja> valor) {
         int indexTabla = 0;
-        int menor = 0;
+        double menor = 0;
         for (Hoja hoja : valor) {
             if (menor == 0) {
                 menor = hoja.getValor();
@@ -201,5 +196,16 @@ public class ControladorVista2 {
 
         }
         return indexTabla;
+    }
+    
+    public double traerVelocidad(boolean esVehiculo, Grafo grafo,String reloj){
+        double velocidad=0;
+        if(esVehiculo){
+             velocidad += (double) grafo.getDistancia() / ((double) grafo.getTiempo_vehiculo() * (1 + controllerR.porbabilidadTrafico(reloj,grafo)));
+        }else{
+            velocidad=(double)grafo.getDistancia()/(double)grafo.getTiempo_pie();
+        }
+        
+        return velocidad;
     }
 }
