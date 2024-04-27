@@ -17,6 +17,10 @@ public class Grafo {
     private int desgaste_personal;
     private int distancia;
 
+    public Grafo() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public String getOrigen() {
         return origen;
     }
