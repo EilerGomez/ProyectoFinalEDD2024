@@ -51,6 +51,33 @@ public class ControladorRutas {
         }
     }
 
+    public void llenarTablaSiesCaminando(JTable tablaDestino, ArrayList<Grafo> lista, String columName) {
+        ArrayList<String> rutas = new ArrayList<>();
+        for (Grafo grafo : lista) {
+            boolean exist = false;
+            for (String destino : rutas) {
+                if (destino.equals(grafo.getDestino()) || destino.equals(grafo.getOrigen())) {
+                    exist = true;
+                    break;
+                }
+            }
+
+            if (exist == false) {
+                rutas.add(grafo.getDestino());
+                rutas.add(grafo.getOrigen());
+            }
+        }
+        //llenar tabla de destino
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn(columName);
+        String[] fila = new String[1];
+        for (String destino : rutas) {
+            fila[0] = destino;
+            modelo.addRow(fila);
+        }
+        tablaDestino.setModel(modelo);
+    }
+
     public void llenarTablasDestino(JTable tablaDestino, ArrayList<Grafo> lista) {
         ArrayList<String> destinos = new ArrayList<>();
 
@@ -171,7 +198,7 @@ public class ControladorRutas {
 
         for (Grafo grafo : lista) {
             distancia += grafo.getDistancia();
-            rapidezVehiculo += (double) grafo.getDistancia() / ((double) grafo.getTiempo_vehiculo() * (1 + porbabilidadTrafico(reloj,grafo)));
+            rapidezVehiculo += (double) grafo.getDistancia() / ((double) grafo.getTiempo_vehiculo() * (1 + porbabilidadTrafico(reloj, grafo)));
             System.out.println("Distancia " + grafo.getDistancia() + "/" + grafo.getTiempo_vehiculo() + "*1+" + traerHorario(grafo).getProbabilidad_trafico());
             rapidezAPie += (double) grafo.getDistancia() / (double) grafo.getTiempo_pie();
             consumoGas += grafo.getConsumo_gas();
@@ -266,6 +293,11 @@ public class ControladorRutas {
     public void graficarGrafoCompleto() {
         Graficar graficar = new Graficar();
         graficar.graficarGrafoCompleto(Datos.Datos.listaGrafos, "Images", "mapaCompleto");
+    }
+
+    public void graficarGrafoDirigido() {
+        Graficar graficar = new Graficar();
+        graficar.graficarGrafoDirigido(Datos.Datos.listaGrafos, "Images", "mapaDirigido");
     }
     /*public void mejorRuta(JLabel labelMejorRuta, ArrayList<ArrayList<Grafo>> lista, boolean esVehiculo) {
         int contador = 1;

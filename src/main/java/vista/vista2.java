@@ -535,6 +535,9 @@ public class vista2 extends javax.swing.JFrame {
         } else {
             nuevasRutas.clear();
             nuevasRutas = rutasController.encontrarRutas(puntoSeleccionado, destino, Datos.Datos.listaGrafos);
+            if (!esVehiculo) {
+                nuevasRutas = rutasController.encontrarRutas(puntoSeleccionado, destino, Datos.Datos.listaGrafosSiEsCaminando);
+            }
             listaContadorImages.clear();
             Graficar graficar = new Graficar();
             int indice = 1;
@@ -567,7 +570,7 @@ public class vista2 extends javax.swing.JFrame {
                 controladorRutas2.generarArbolesBEImagenes(i, nuevasRutas, contadorImagesFuncionalidades, esVehiculo, horaLabel);
             } else if (!esVehiculo && (i == 1 || i == 4)) {
                 controladorRutas2.generarArbolesBEImagenes(i, nuevasRutas, contadorImagesFuncionalidades, esVehiculo, horaLabel);
-            } else if(i==2||i==5) {
+            } else if (i == 2 || i == 5) {
                 controladorRutas2.generarArbolesBEImagenes(i, nuevasRutas, contadorImagesFuncionalidades, esVehiculo, horaLabel);
             }
         }

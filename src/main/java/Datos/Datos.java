@@ -15,4 +15,5 @@ import modelo.Horario;
 public class Datos {
     public static ArrayList<Grafo> listaGrafos= new ArrayList<>();
     public static ArrayList<Horario> listaHorarios= new ArrayList<>();
+    public static ArrayList<Grafo> listaGrafosSiEsCaminando = new ArrayList<>();
 }

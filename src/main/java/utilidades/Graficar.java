@@ -74,6 +74,38 @@ public class Graficar {
         System.out.println("El gráfico se ha generado correctamente como arreglo.png");
     }
 
+    public void graficarGrafoDirigido(ArrayList<Grafo> lista, String carpeta, String nombre) {
+
+        // Crear el gráfico
+        MutableGraph g = mutGraph("example2").setDirected(true);
+
+        // Agregar nodos y conexiones al grafo
+        for (Grafo grafo : lista) {
+            //String[] elementos = par.split("\\|"); // Dividir el par en sus elementos
+
+            String origen = grafo.getOrigen();
+            String destino = grafo.getDestino();
+
+            // Agregar nodos al grafo
+            Node nodoOrigen = node(origen).with(Label.of(origen));
+            Node nodoDestino = node(destino).with(Label.of(destino));
+
+            // Agregar una conexión entre los nodos con una flecha
+            g.add(nodoOrigen.link(to(nodoDestino)).with(Label.of(origen)));
+            g.add(nodoDestino.link(to(nodoOrigen)).with(Label.of(destino)));
+
+        }
+
+        try {
+            // Generar el gráfico
+            Graphviz.fromGraph(g).render(Format.PNG).toFile(new File(carpeta + "/" + nombre + ".png"));
+        } catch (IOException ex) {
+            Logger.getLogger(Graficar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("El gráfico se ha generado correctamente como grafoDirigido.png");
+    }
+
     public void graficarRutaPorRuta(ArrayList<Grafo> listaRutas, int index, int contadorImagenes, String carpeta, String nombre) {
         MutableGraph g = mutGraph("RutaporRuta").setDirected(true);
         for (Grafo grafo : listaRutas) {
@@ -93,7 +125,7 @@ public class Graficar {
         try {
             // Generar el gráfico
             Graphviz.fromGraph(g).render(Format.PNG).toFile(new File(
-                    carpeta + "/"+nombre+"" + index + "_" + contadorImagenes + ".png"));
+                    carpeta + "/" + nombre + "" + index + "_" + contadorImagenes + ".png"));
             System.out.println("Se ha guardado la imagen Ruta" + index + "_" + contadorImagenes + ".png");
         } catch (IOException ex) {
             Logger.getLogger(Graficar.class.getName()).log(Level.SEVERE, null, ex);

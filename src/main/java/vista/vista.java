@@ -24,7 +24,7 @@ import utilidades.Reloj;
  * @author eiler
  */
 public class vista extends javax.swing.JFrame {
-    
+
     Controlador.ControladorRutas rutasController = new ControladorRutas();
     public int contadorImagenes = 1;
     public ArrayList<String> listaContadorImages = new ArrayList<>();
@@ -43,9 +43,9 @@ public class vista extends javax.swing.JFrame {
         initOthersComponents(labelRutaUnidad, jPanel2);
         this.btnVerRutas.setEnabled(false);
         this.vehiculoBTN.setSelected(true);
-        
+
     }
-    
+
     private void initOthersComponents(JLabel label, JPanel panel) {
         // Crear un JPanel que contendrá al JLabel con la imagen
         JPanel imagePanel = new JPanel();
@@ -66,10 +66,10 @@ public class vista extends javax.swing.JFrame {
         panel.setLayout(new BorderLayout());
         panel.add(scrollPane, BorderLayout.CENTER);
     }
-    
-    private void llamarImagenGrafoCompleto() {
-        
-        String imagePath = "Images/mapaCompleto.png";
+
+    private void llamarImagenGrafoCompleto(String direccion) {
+
+        String imagePath = direccion + ".png";
 
         // Crear un ImageIcon con la imagen cargada desde el archivo
         ImageIcon icono = new ImageIcon(imagePath);
@@ -77,16 +77,16 @@ public class vista extends javax.swing.JFrame {
         // Asignar el ImageIcon al JLabel
         labelGrafo.setIcon(icono);
     }
-    
+
     private void llamarImagenDeCadaRuta(String nameImg) {
         String imagePath;
         if (comboRutas.getSelectedIndex() < 0) {
             imagePath = "ImagesTemp/" + nameImg + "_" + listaContadorImages.get(0) + ".png";
         } else {
             imagePath = "ImagesTemp/" + nameImg + "_" + listaContadorImages.get(comboRutas.getSelectedIndex()) + ".png";
-            
+
         }
-        
+
         File imageFile = new File(imagePath);
 
         // Verificar si el archivo de imagen existe
@@ -457,6 +457,13 @@ public class vista extends javax.swing.JFrame {
             rutas = rutasController.encontrarRutas(
                     rutasController.nombreRuta(tablaOrigen),
                     rutasController.nombreRuta(tablaDestino), Datos.Datos.listaGrafos);
+            if (!vehiculoBTN.isSelected()) {
+                if (rutas.size() == 0) {
+                    rutas = rutasController.encontrarRutas(
+                            rutasController.nombreRuta(tablaOrigen),
+                            rutasController.nombreRuta(tablaDestino), Datos.Datos.listaGrafosSiEsCaminando);
+                }
+            }
             System.out.println(rutas.size());
             int index = 1;
             for (ArrayList<Grafo> listaRuta : rutas) {
@@ -476,7 +483,7 @@ public class vista extends javax.swing.JFrame {
             }
             rutasController.llenarComboRutas(rutas, comboRutas);
             rutasController.mejorRuta(labelMejorRuta, rutas, vehiculoBTN.isSelected());
-            
+
         }
 
     }//GEN-LAST:event_btnVerRutasActionPerformed
@@ -498,7 +505,7 @@ public class vista extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String imagePath = "ImagesTemp/" + comboRutas.getSelectedItem() + "_" + listaContadorImages.get(comboRutas.getSelectedIndex()) + ".png";
-        
+
         vista2 vista2 = new vista2(this, vehiculoBTN.isSelected(), tablaDestino.getValueAt(tablaDestino.getSelectedRow(), tablaDestino.getSelectedColumn()).toString(), "",
                 imagePath, rutas.get(comboRutas.getSelectedIndex()));
         vista2.setVisible(true);
@@ -531,29 +538,34 @@ public class vista extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         if (!vehiculoBTN.isSelected()) {
-            crearGrafoDirigido(Datos.Datos.listaGrafos);
-            
+            //crear o graficar grafo dirigido
+            rutasController.graficarGrafoDirigido();
+            llamarImagenGrafoCompleto("Images/mapaDirigido");
+            rutasController.llenarTablaSiesCaminando(tablaDestino, Datos.Datos.listaGrafos, "Destinos");
+            rutasController.llenarTablaSiesCaminando(tablaOrigen, Datos.Datos.listaGrafos, "Origenes");
+        } else {
+            rutasController.graficarGrafoCompleto();///solo cuando es de vehiculo
+            llamarImagenGrafoCompleto("Images/mapaCompleto");
+            rutasController.llenarTablasDestino(tablaDestino, Datos.Datos.listaGrafos);
+            rutasController.llenarTablasOrigen(tablaOrigen, Datos.Datos.listaGrafos);
         }
-        rutasController.graficarGrafoCompleto();
-        llamarImagenGrafoCompleto();
-        rutasController.llenarTablasDestino(tablaDestino, Datos.Datos.listaGrafos);
-        rutasController.llenarTablasOrigen(tablaOrigen, Datos.Datos.listaGrafos);
+
     }//GEN-LAST:event_jButton3ActionPerformed
-    
+
     public void crearGrafoDirigido(ArrayList<Grafo> lista) {
-        
+
         ArrayList<Grafo> listaTmp = new ArrayList<>();
         listaTmp = lista;
         System.out.println(listaTmp.size());
         for (int i = 0; i < lista.size(); i++) {
-            
+
             Grafo tmp = new Grafo(lista.get(i).getDestino(), lista.get(i).getOrigen(), lista.get(i).getTiempo_vehiculo(), lista.get(i).getTiempo_pie(), lista.get(i).getConsumo_gas(), lista.get(i).getDesgaste_personal(), lista.get(i).getDistancia());
             listaTmp.add(tmp);
         }
-        
+
         System.out.println(listaTmp.size());
         lista = listaTmp;
-        
+
     }
     /**
      * @param args the command line arguments
