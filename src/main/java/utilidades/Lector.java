@@ -14,10 +14,7 @@ import java.util.logging.Logger;
 import modelo.Grafo;
 import modelo.Horario;
 
-/**
- *
- * @author eiler
- */
+
 public class Lector {
 
     private String texto;

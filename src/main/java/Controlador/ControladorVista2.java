@@ -15,10 +15,7 @@ import utilidades.ArbolB;
 import utilidades.Graficar;
 import utilidades.Hoja;
 
-/**
- *
- * @author eiler
- */
+
 public class ControladorVista2 {
 
     ControladorRutas controllerR = new ControladorRutas();

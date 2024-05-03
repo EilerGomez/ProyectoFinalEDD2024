@@ -19,10 +19,6 @@ import modelo.Grafo;
 import utilidades.Graficar;
 import utilidades.Reloj;
 
-/**
- *
- * @author eiler
- */
 public class vista extends javax.swing.JFrame {
 
     Controlador.ControladorRutas rutasController = new ControladorRutas();

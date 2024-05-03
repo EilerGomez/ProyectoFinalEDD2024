@@ -4,10 +4,7 @@
  */
 package utilidades;
 
-/**
- *
- * @author eiler
- */
+
 public class Hoja {
     private int llave;//valor con el que se va almacenar cada Hoja
     private double valor;//el id del arraylist

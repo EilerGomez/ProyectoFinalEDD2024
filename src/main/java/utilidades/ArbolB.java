@@ -220,7 +220,7 @@ public class ArbolB<T extends Comparable<T>> {
     }
 
     // Método main para probar la implementación
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         /*ArbolB<Integer> arbol = new ArbolB<>();
         arbol.insertar(5,0);
         arbol.insertar(6,0);
@@ -235,6 +235,6 @@ public class ArbolB<T extends Comparable<T>> {
         arbol.insertar(28,0);
         arbol.insertar(14,0);
         arbol.imprimir();
-        arbol.graficar("arbolb.dot", "arbolb.png");*/
-    }
+        arbol.graficar("arbolb.dot", "arbolb.png");
+    }*/
 }

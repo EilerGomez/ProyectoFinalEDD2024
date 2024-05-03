@@ -9,10 +9,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import utilidades.Lector;
 
-/**
- *
- * @author eiler
- */
+
 public class cargaDatos2 extends javax.swing.JFrame {
 
     /**

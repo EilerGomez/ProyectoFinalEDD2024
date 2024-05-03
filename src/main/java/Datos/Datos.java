@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import modelo.Grafo;
 import modelo.Horario;
 
-/**
- *
- * @author eiler
- */
+
 public class Datos {
     public static ArrayList<Grafo> listaGrafos= new ArrayList<>();
     public static ArrayList<Horario> listaHorarios= new ArrayList<>();

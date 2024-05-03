@@ -4,10 +4,7 @@
  */
 package modelo;
 
-/**
- *
- * @author eiler
- */
+
 public class Grafo {
     private String origen;
     private String destino;

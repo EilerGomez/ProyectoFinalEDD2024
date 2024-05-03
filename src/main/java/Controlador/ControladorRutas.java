@@ -17,10 +17,6 @@ import modelo.Grafo;
 import modelo.Horario;
 import utilidades.Graficar;
 
-/**
- *
- * @author eiler
- */
 public class ControladorRutas {
 
     public ArrayList<ArrayList<Grafo>> encontrarRutas(String origen, String destino, ArrayList<Grafo> grafos) {

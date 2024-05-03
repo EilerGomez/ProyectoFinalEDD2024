@@ -6,10 +6,7 @@ package main;
 
 import vista.cargaDatos;
 
-/**
- *
- * @author eiler
- */
+
 public class main {
 
     /**

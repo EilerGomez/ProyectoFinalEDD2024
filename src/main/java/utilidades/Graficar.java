@@ -133,7 +133,7 @@ public class Graficar {
 
     }
 
-    public static void main(String[] args) throws IOException {
+   /* public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
 
         // Leer el arreglo de pares ingresado por el usuario
@@ -170,5 +170,5 @@ public class Graficar {
 
         System.out.println("El gráfico se ha generado correctamente como arreglo.png");
         scanner.close();
-    }
+    }*/
 }

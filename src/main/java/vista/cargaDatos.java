@@ -11,10 +11,7 @@ import javax.swing.JOptionPane;
 import utilidades.Graficar;
 import utilidades.Lector;
 
-/**
- *
- * @author eiler
- */
+
 public class cargaDatos extends javax.swing.JFrame {
     ControladorRutas rutasController = new ControladorRutas();
 
