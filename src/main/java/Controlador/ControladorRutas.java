@@ -50,16 +50,25 @@ public class ControladorRutas {
     public void llenarTablaSiesCaminando(JTable tablaDestino, ArrayList<Grafo> lista, String columName) {
         ArrayList<String> rutas = new ArrayList<>();
         for (Grafo grafo : lista) {
-            boolean exist = false;
+            boolean existD = false;
+            boolean existO=false;
             for (String destino : rutas) {
-                if (destino.equals(grafo.getDestino()) || destino.equals(grafo.getOrigen())) {
-                    exist = true;
+                if (destino.equals(grafo.getDestino())) {
+                    existD = true;
+                    break;
+                }
+            }
+            for (String destino : rutas) {
+                if (destino.equals(grafo.getOrigen())) {
+                    existO = true;
                     break;
                 }
             }
 
-            if (exist == false) {
+            if (existD == false) {
                 rutas.add(grafo.getDestino());
+            }
+            if (existO == false) {
                 rutas.add(grafo.getOrigen());
             }
         }
@@ -195,7 +204,7 @@ public class ControladorRutas {
         for (Grafo grafo : lista) {
             distancia += grafo.getDistancia();
             rapidezVehiculo += (double) grafo.getDistancia() / ((double) grafo.getTiempo_vehiculo() * (1 + porbabilidadTrafico(reloj, grafo)));
-            System.out.println("Distancia " + grafo.getDistancia() + "/" + grafo.getTiempo_vehiculo() + "*1+" + traerHorario(grafo).getProbabilidad_trafico());
+            System.out.println("Distancia " + grafo.getDistancia() + "/" + grafo.getTiempo_vehiculo() + "*1+" + porbabilidadTrafico(reloj,grafo));
             rapidezAPie += (double) grafo.getDistancia() / (double) grafo.getTiempo_pie();
             consumoGas += grafo.getConsumo_gas();
             esfuerzoFisico += grafo.getDesgaste_personal();
@@ -221,28 +230,28 @@ public class ControladorRutas {
     }
 
     public double porbabilidadTrafico(String hora, Grafo grafo) {
-
         double probabilidad = 0.00;
-        Horario horar = traerHorario(grafo);
-        System.out.println("Horario: " + horar.getProbabilidad_trafico() / 100 + " Probabilidad trafico");
         String[] split = hora.split(":");
-        System.out.println("Hora: " + split[0]);
-        if (Integer.parseInt(split[0]) >= horar.getHora_inicio() && Integer.parseInt(split[0]) <= horar.getHora_finalizada()) {
-            probabilidad = ((double) horar.getProbabilidad_trafico()) / 100;
+        System.out.println("Trayendo horarios: " + traerHorario(grafo).size());
+        
+        for (Horario horar : traerHorario(grafo)) {
+            System.out.println(horar.getOrigen() + "-" + horar.getDestino()+ "-"+horar.getHora_inicio() + "-" + horar.getProbabilidad_trafico());
+            if (Integer.parseInt(split[0]) >= horar.getHora_inicio() && Integer.parseInt(split[0]) <= horar.getHora_finalizada()) {
+                probabilidad += ((double) horar.getProbabilidad_trafico()) / 100;
+            }
         }
 
         return probabilidad;
     }
 
-    public Horario traerHorario(Grafo grafo) {
-        Horario h = new Horario("", "", 0, 0, 0);
+    public ArrayList<Horario> traerHorario(Grafo grafo) {
+        ArrayList<Horario> lista = new ArrayList<>();
         for (Horario horario : Datos.Datos.listaHorarios) {
             if (horario.getDestino().equals(grafo.getDestino()) && horario.getOrigen().equals(grafo.getOrigen())) {
-                h = horario;
-                break;
+                lista.add(horario);
             }
         }
-        return h;
+        return lista;
     }
 
     public boolean hayDobleVia(ArrayList<Grafo> listado) {

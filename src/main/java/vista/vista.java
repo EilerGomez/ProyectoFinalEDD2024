@@ -20,7 +20,7 @@ import utilidades.Graficar;
 import utilidades.Reloj;
 
 public class vista extends javax.swing.JFrame {
-
+    String destino="";
     Controlador.ControladorRutas rutasController = new ControladorRutas();
     public int contadorImagenes = 1;
     public ArrayList<String> listaContadorImages = new ArrayList<>();
@@ -448,6 +448,7 @@ public class vista extends javax.swing.JFrame {
     }//GEN-LAST:event_vehiculoBTNActionPerformed
 
     private void btnVerRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerRutasActionPerformed
+       destino=tablaDestino.getValueAt(tablaDestino.getSelectedRow(), tablaDestino.getSelectedColumn()).toString();
         if (!rutasController.esDiferenteRuta(tablaDestino, tablaOrigen)) {
             rutas.clear();
             rutas = rutasController.encontrarRutas(
@@ -481,6 +482,14 @@ public class vista extends javax.swing.JFrame {
             rutasController.mejorRuta(labelMejorRuta, rutas, vehiculoBTN.isSelected());
 
         }
+         if (!vehiculoBTN.isSelected()) {
+            //crear o graficar grafo dirigido
+            rutasController.llenarTablaSiesCaminando(tablaDestino, Datos.Datos.listaGrafos, "Destinos");
+            rutasController.llenarTablaSiesCaminando(tablaOrigen, Datos.Datos.listaGrafos, "Origenes");
+        } else {
+            rutasController.llenarTablasDestino(tablaDestino, Datos.Datos.listaGrafos);
+            rutasController.llenarTablasOrigen(tablaOrigen, Datos.Datos.listaGrafos);
+        }
 
     }//GEN-LAST:event_btnVerRutasActionPerformed
 
@@ -502,7 +511,7 @@ public class vista extends javax.swing.JFrame {
         // TODO add your handling code here:
         String imagePath = "ImagesTemp/" + comboRutas.getSelectedItem() + "_" + listaContadorImages.get(comboRutas.getSelectedIndex()) + ".png";
 
-        vista2 vista2 = new vista2(this, vehiculoBTN.isSelected(), tablaDestino.getValueAt(tablaDestino.getSelectedRow(), tablaDestino.getSelectedColumn()).toString(), "",
+        vista2 vista2 = new vista2(this, vehiculoBTN.isSelected(), destino, "",
                 imagePath, rutas.get(comboRutas.getSelectedIndex()));
         vista2.setVisible(true);
         vista2.setEnabled(true);

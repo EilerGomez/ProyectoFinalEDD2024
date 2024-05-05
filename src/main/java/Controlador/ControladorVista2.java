@@ -148,16 +148,7 @@ public class ControladorVista2 {
         }
     }
 
-    public int propabilidadTrafico(Grafo grafo, JLabel labelReloj) {
-        int probabilidad = 0;
-        String[] splits = labelReloj.getText().split(":");
-        Horario h = controllerR.traerHorario(grafo);
-        if (Integer.parseInt(splits[0]) >= h.getHora_inicio() && Integer.parseInt(splits[0]) <= h.getHora_finalizada()) {
-            probabilidad = h.getProbabilidad_trafico();
-        }
-
-        return probabilidad;
-    }
+    
 
     public int devolverValorMenor(ArrayList<Hoja> valor) {
         int indexTabla = 0;

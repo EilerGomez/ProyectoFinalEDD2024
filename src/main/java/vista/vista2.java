@@ -19,7 +19,6 @@ import modelo.Grafo;
 import utilidades.Graficar;
 import utilidades.Reloj;
 
-
 public class vista2 extends javax.swing.JFrame {
 
     public Controlador.ControladorRutas rutasController = new ControladorRutas();
@@ -533,7 +532,9 @@ public class vista2 extends javax.swing.JFrame {
             nuevasRutas.clear();
             nuevasRutas = rutasController.encontrarRutas(puntoSeleccionado, destino, Datos.Datos.listaGrafos);
             if (!esVehiculo) {
-                nuevasRutas = rutasController.encontrarRutas(puntoSeleccionado, destino, Datos.Datos.listaGrafosSiEsCaminando);
+                if (nuevasRutas.size() == 0) {
+                    nuevasRutas = rutasController.encontrarRutas(puntoSeleccionado, destino, Datos.Datos.listaGrafosSiEsCaminando);
+                }
             }
             listaContadorImages.clear();
             Graficar graficar = new Graficar();
